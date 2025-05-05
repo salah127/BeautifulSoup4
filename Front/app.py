@@ -20,6 +20,10 @@ def get_articles():
     tag = request.args.get('tag')
     author = request.args.get('author')
     search = request.args.get('search')
+    
+    if not tag and not author and not search:
+        articles = list(collection.find({}, {'_id': 0}))
+        return jsonify(articles)
 
     if tag:
         query['tag'] = tag
