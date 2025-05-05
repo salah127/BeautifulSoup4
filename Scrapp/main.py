@@ -22,4 +22,4 @@ def main():
         print("No articles fetched.")
 
 if __name__ == "__main__":
-    main()
+    main() 

@@ -6,4 +6,4 @@ def get_db_connection(uri, db_name):
 
 def insert_article(db, collection_name, article_data):
     collection = db[collection_name]
-    collection.insert_one(article_data)
+    collection.insert_one(article_data) 

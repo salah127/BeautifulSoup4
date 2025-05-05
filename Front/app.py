@@ -24,7 +24,7 @@ def get_articles():
     if not tag and not author and not search:
         articles = list(collection.find({}, {'_id': 0}))
         return jsonify(articles)
-
+ 
     if tag:
         query['tag'] = tag
     if author:

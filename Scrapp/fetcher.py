@@ -88,7 +88,7 @@ def fetch_articles(url):
                 'author_name': author_name,
                 'images': images,
                 'tag': tag,
-            })
+            }) 
 
         return articles_data
         
