@@ -24,7 +24,7 @@ def get_articles():
     if tag:
         query['tag'] = tag
     if author:
-        query['author_name'] = author
+        query['author_name'] = {'$regex': author, '$options': 'i'}
     if search:
         query['title'] = {'$regex': search, '$options': 'i'}
 
