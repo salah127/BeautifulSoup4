@@ -10,13 +10,13 @@
         margin: 20px;
       }
 
-      .card {
+      .article {
         border: 1px solid #ddd;
         padding: 15px;
         margin-bottom: 10px;
       }
 
-      .card img {
+      .article img {
         max-width: 100%;
         height: auto;
       }
@@ -47,7 +47,10 @@
       <input type="text" id="tag" placeholder="Filter by tag" />
       <button onclick="fetchArticles()">Search</button>
     </div>
-    <div id="articles"></div>
+    <div
+      id="articles"
+      style="display: flex; flex-wrap: wrap; justify-content: center"
+    ></div>
 
     <script>
       async function fetchArticles() {
@@ -71,14 +74,15 @@
 
         articles.forEach((article) => {
           const articleDiv = document.createElement("div");
-          articleDiv.className = "card";
-          articleDiv.style = "width: 18rem;";
+          articleDiv.className = "article";
           articleDiv.innerHTML = `
+                    <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="${article.image}" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">${article.title}</h5>
                             <p class="card-text">${article.article_hat}</p>
                             <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
                     </div>
                 `;
           articlesDiv.appendChild(articleDiv);
