@@ -54,7 +54,8 @@ def fetch_articles(url):
                     content_head = article_soup.find('header', class_='entry-header') 
                     
                     if content_head:
-                        hat_image_tag = content_head.find('img')
+                        image_div = content_head.find('figure', class_='article-hat-img')
+                        hat_image_tag = image_div.find('img')
                         hat_image_url = hat_image_tag['src'] if hat_image_tag and hat_image_tag.has_attr('src') else None
                         title_tag = content_head.find('h1', class_='entry-title')
                         title = title_tag.get_text(strip=True) if title_tag else None
