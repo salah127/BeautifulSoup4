@@ -10,11 +10,6 @@
         margin: 20px;
       }
 
-      .article {
-        border: 1px solid #ddd;
-        padding: 15px;
-        margin-bottom: 10px;
-      }
 
       .article img {
         max-width: 100%;
@@ -49,7 +44,7 @@
     </div>
     <div
       id="articles"
-      style="display: flex; flex-wrap: wrap; justify-content: center"
+      style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px"
     ></div>
 
     <script>
@@ -86,13 +81,19 @@
 
         articles.forEach((article) => {
           const articleDiv = document.createElement("div");
-          articleDiv.className = "article";
+          articleDiv.className = "card";
           articleDiv.innerHTML = `
             <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="${article.image}" alt="Card image cap">
+                <img class="card-img-top" src="${
+                  article.image
+                }" alt="Card image cap" style="width: 286px; height: 180px; object-fit: cover;">
                 <div class="card-body">
-                <h5 class="card-title">${article.title}</h5>
-                <p class="card-text">${article.article_hat}</p>
+                <h5 class="card-title">${article.title.substring(0, 50)}${
+            article.title.length > 50 ? "..." : ""
+          }</h5>
+                <p class="card-text">${article.article_hat.substring(0, 50)}${
+            article.article_hat.length > 50 ? "..." : ""
+          }</p>
                 <p class="card-text">${article.author_name}</p>
                 <a href="" class="btn btn-primary">Click</a>
                 </div>
