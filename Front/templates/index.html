@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .article {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .article img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .filters {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Articles</h1>
+    <div class="filters">
+        <input type="text" id="search" placeholder="Search by title">
+        <input type="text" id="author" placeholder="Filter by author">
+        <input type="text" id="tag" placeholder="Filter by tag">
+        <button onclick="fetchArticles()">Search</button>
+    </div>
+    <div id="articles"></div>
+
+    <script>
+        async function fetchArticles() {
+            const search = document.getElementById('search').value;
+            const author = document.getElementById('author').value;
+            const tag = document.getElementById('tag').value;
+
+            const params = new URLSearchParams();
+            if (search) params.append('search', search);
+            if (author) params.append('author', author);
+            if (tag) params.append('tag', tag);
+
+            const response = await fetch('http://127.0.0.1:5000/api/articles?' + params.toString());
+            
+            const articles = await response.json();
+
+            const articlesDiv = document.getElementById('articles');
+            articlesDiv.innerHTML = '';
+
+            articles.forEach(article => {
+                const articleDiv = document.createElement('div');
+                articleDiv.className = 'article';
+                articleDiv.innerHTML = `
+                    <h2>${article.title}</h2>
+                    <p><strong>Author:</strong> ${article.author_name || 'N/A'}</p>
+                    <p><strong>Tag:</strong> ${article.tag || 'N/A'}</p>
+                    <p><strong>Published Date:</strong> ${article.published_date || 'N/A'}</p>
+                    <p>${article.article_hat || ''}</p>
+                    ${article.image ? `<img src="${article.image}" alt="Article Image">` : ''}
+                `;
+                articlesDiv.appendChild(articleDiv);
+            });
+        }
+
+        // Fetch all articles on page load
+        fetchArticles();
+    </script>
+</body>
+
+</html>

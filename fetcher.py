@@ -17,15 +17,15 @@ def fetch_articles(url):
         if not main_tag:
             print("No <main> tag found.")
             return []
-
-        articles = soup.find_all('article')
+        
+        ###############################################################################################
+        # I added thi class_='d-flex' just to limit my article/ c'est juste pour limité les articles.#
+        ###############################################################################################
+        articles = soup.find_all('article', class_='d-flex')    
         for article in articles:
-            img_div = article.find('div', class_='post-thumbnail picture rounded-img')
-            img_tag = img_div.find('img') if img_div else None
 
             meta_div = article.find('div', class_='entry-meta ms-md-5 pt-md-0 pt-3')
             tag = (meta_div.find('span', class_='favtag color-b').get_text(strip=True)) if meta_div else None
-            date = (meta_div.find('span', class_='posted-on t-def px-3').get_text(strip=True)) if meta_div else None
 
             header = (meta_div.find('header', class_='entry-header pt-1')) if meta_div else None
             a_tag = header.find('a') if header else None
@@ -78,27 +78,15 @@ def fetch_articles(url):
                                 })
                 except requests.exceptions.RequestException as e:
                     print(f"Error fetching article content: {e}")
-            
-            # Sub_Cat = (meta_div.find('span', class_='favtag color-b').get_text(strip=True)) if meta_div and meta_div.find('span', class_='favtag color-b') else None
-            # terms_div = meta_div.find('div', class_='article-terms')  
-            # Sub_Cat = terms_div.get_text(strip=True)  
-
-            summary_div = (meta_div.find('div', class_='entry-excerpt t-def t-size-def pt-1')) if meta_div else None
-            summary = summary_div.get_text(strip=True) if summary_div else None
-
             articles_data.append({
                 'title': title,
                 'image': hat_image_url,
-                
                 'Sub_Cat': Sub_Cat,
                 'article_hat': article_hat,
                 'published_date': published_date,
                 'author_name': author_name,
                 'images': images,
                 'tag': tag,
-                'date': date,
-                'url': article_url,
-                'summary': summary,  
             })
 
         return articles_data

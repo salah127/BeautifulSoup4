@@ -7,9 +7,10 @@ def main():
     
     # Fetch articles
     articles = fetch_articles(url)
+    print(f"Fetched {len(articles)} articles.")
     
     # Connect to MongoDB
-    client = MongoClient('mongodb://localhost:27017/test')
+    client = MongoClient('mongodb://localhost:27017/')
     db = client['article_db']
     collection = db['articles']
     
