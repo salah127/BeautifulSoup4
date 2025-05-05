@@ -22,7 +22,6 @@ def fetch_articles(url):
         for article in articles:
             img_div = article.find('div', class_='post-thumbnail picture rounded-img')
             img_tag = img_div.find('img') if img_div else None
-            img_url = img_tag['data-lazy-src'] if img_tag and img_tag.has_attr('data-lazy-src') else None
 
             meta_div = article.find('div', class_='entry-meta ms-md-5 pt-md-0 pt-3')
             tag = (meta_div.find('span', class_='favtag color-b').get_text(strip=True)) if meta_div else None
@@ -34,13 +33,16 @@ def fetch_articles(url):
             
             article_hat = None
             if article_url:
-                try:
+                try: 
                     article_response = requests.get(article_url, headers=headers)
                     article_response.raise_for_status()
                     article_soup = BeautifulSoup(article_response.text, 'html.parser')
                     
-                    hat_div = article_soup.find('div', class_='article-hat')
-                    article_hat = hat_div.find('p').get_text(strip=True) if hat_div else None
+                    terms_div = article_soup.find('div', class_='article-terms')
+                    Sub_Cat = None
+                    if terms_div:
+                        ul_tag = terms_div.find('ul')
+                        Sub_Cat = ul_tag.get_text(strip=True) if ul_tag else None
                     
                     time_tag = article_soup.find('time', class_='entry-date')
                     published_date = time_tag['datetime'] if time_tag and time_tag.has_attr('datetime') else None
@@ -48,6 +50,17 @@ def fetch_articles(url):
                     byline_span = article_soup.find('span', class_='byline')
                     author_a_tag = byline_span.find('a') if byline_span else None
                     author_name = author_a_tag.get_text(strip=True) if author_a_tag else None
+
+                    content_head = article_soup.find('header', class_='entry-header') 
+                    
+                    if content_head:
+                        hat_image_tag = content_head.find('img')
+                        hat_image_url = hat_image_tag['src'] if hat_image_tag and hat_image_tag.has_attr('src') else None
+                        title_tag = content_head.find('h1', class_='entry-title')
+                        title = title_tag.get_text(strip=True) if title_tag else None
+                        hat_div = content_head.find('div', class_='article-hat')
+                        article_hat = hat_div.find('p').get_text(strip=True) if hat_div else None
+                    
                     
                     images = []
                     content_div = article_soup.find('div', class_='entry-content')
@@ -65,16 +78,18 @@ def fetch_articles(url):
                                 })
                 except requests.exceptions.RequestException as e:
                     print(f"Error fetching article content: {e}")
-            title = (a_tag.find('h3').get_text(strip=True)) if a_tag and a_tag.find('h3') else None
             
-            Sub_Cat = (meta_div.find('span', class_='favtag color-b').get_text(strip=True)) if meta_div and meta_div.find('span', class_='favtag color-b') else None
+            # Sub_Cat = (meta_div.find('span', class_='favtag color-b').get_text(strip=True)) if meta_div and meta_div.find('span', class_='favtag color-b') else None
+            # terms_div = meta_div.find('div', class_='article-terms')  
+            # Sub_Cat = terms_div.get_text(strip=True)  
 
             summary_div = (meta_div.find('div', class_='entry-excerpt t-def t-size-def pt-1')) if meta_div else None
             summary = summary_div.get_text(strip=True) if summary_div else None
 
             articles_data.append({
                 'title': title,
-                'image': img_url,
+                'image': hat_image_url,
+                
                 'Sub_Cat': Sub_Cat,
                 'article_hat': article_hat,
                 'published_date': published_date,
